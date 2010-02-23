@@ -1,0 +1,28 @@
+# Spammeli
+
+Spammeli will be an irc bot.
+
+## Install
+
+Before you install Spammeli make sure you have a bundler gem installed on your system. http://github.com/carlhuda/bundler.
+
+When you are ready then hit:
+
+    bundle install
+    
+## Command structure
+
+If you are developing your own custom command to Spammeli then you must have an invoke method in the class. Here is an example:
+
+    class MyCustomCommand
+      attr_reader :name, :params
+      
+      def initialize(params = [])
+        @name = 'MyCustomCommand'
+        @params = params
+      end
+      
+      def invoke
+        # Implement or invoke your command in here
+      end
+    end
