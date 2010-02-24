@@ -17,7 +17,7 @@ module Spammeli
     
     private
       def determine_type
-        case input
+        case input.strip
         when /^!\w+/ then 'command'
         end
       end

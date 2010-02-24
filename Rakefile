@@ -12,6 +12,6 @@ else
   Spec::Rake::SpecTask.new do |t|
     t.libs << 'lib'
     t.libs << 'spec'
-    t.warning = true
+    t.warning = false
   end
 end
