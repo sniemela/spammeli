@@ -45,7 +45,7 @@ module Spammeli
     end
     
     def object
-      raise UnknownCommand unless custom_command = @@commands[name]
+      raise UnknownCommand, name unless custom_command = @@commands[name]
       custom_command.new(params)
     end
     

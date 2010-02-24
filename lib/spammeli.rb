@@ -1,8 +1,9 @@
 # encoding: utf-8
 
 module Spammeli
-  autoload :Input, 'spammeli/input'
   autoload :Command, 'spammeli/command'
+  autoload :Input,   'spammeli/input'
+  autoload :Irc,     'spammeli/irc'
 end
 
 require 'spammeli/commands'

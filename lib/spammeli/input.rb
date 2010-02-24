@@ -1,9 +1,9 @@
 module Spammeli
   class Input
-    attr_reader :input, :type
+    attr_reader :body, :type
     
     def initialize(input)
-      @input = input
+      @body = input
       @type = nil
     end
     
@@ -17,7 +17,7 @@ module Spammeli
     
     private
       def determine_type
-        case input.strip
+        case body.strip
         when /^!\w+/ then 'command'
         end
       end
