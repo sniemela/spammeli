@@ -7,7 +7,7 @@ module Spammeli
     def initialize(s, p)
       @server, @port = s, p
       @connection = nil
-      @channel = "#spammeli"
+      @channel = "#tk08"
     end
     
     def connect!
