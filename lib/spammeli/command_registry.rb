@@ -24,6 +24,10 @@ module Spammeli
       end
     end
     
+    def self.remove!(command)
+      raise UnknownCommand unless @@commands.delete(command.to_s)
+    end
+    
     def self.commands
       @@commands
     end

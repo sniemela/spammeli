@@ -109,4 +109,19 @@ describe (CommandRegistry = Spammeli::CommandRegistry) do
       lambda { CommandRegistry.invoke('!invalid')}.should raise_error(Spammeli::InvalidCommand)
     end
   end
+  
+  context "when removing" do
+    it "should remove a command" do
+      CommandRegistry.register(:lastfm, LastfmCommand)
+      CommandRegistry.commands.length.should == 1
+
+      CommandRegistry.remove!(:lastfm)
+      CommandRegistry.commands.length.should == 0
+    end
+    
+    it "should complain if the command doesn't exist" do
+      CommandRegistry.commands.length.should == 0
+      lambda { CommandRegistry.remove!(:lasfm) }.should raise_error(Spammeli::UnknownCommand)
+    end
+  end
 end
