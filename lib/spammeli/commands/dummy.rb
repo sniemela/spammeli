@@ -15,5 +15,5 @@ module Spammeli
   end
   
   # Register this command
-  Command.register(:dummy, Commands::Dummy)
+  CommandRegistry.register(:dummy, Commands::Dummy)
 end

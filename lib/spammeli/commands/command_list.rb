@@ -10,10 +10,10 @@ module Spammeli
       end
       
       def invoke
-        Spammeli::Command.commands.keys.sort.join(', ')
+        Spammeli::CommandRegistry.commands.keys.sort.join(', ')
       end
     end
   end
   
-  Command.register(:commands, Commands::CommandList)
+  CommandRegistry.register(:commands, Commands::CommandList)
 end

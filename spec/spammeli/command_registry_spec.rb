@@ -41,30 +41,30 @@ class InvalidCommand
   # This class doesn't have the invoke method
 end
 
-describe (Command = Spammeli::Command) do
+describe (CommandRegistry = Spammeli::CommandRegistry) do
   after(:each) do
-    Command.clear
+    CommandRegistry.clear
   end
   
   context "when created" do
     it "should raise if invalid command format" do
-      lambda { Command.new('invalid command') }.should raise_error(Spammeli::InvalidCommandFormat)
+      lambda { CommandRegistry.new('invalid command') }.should raise_error(Spammeli::InvalidCommandFormat)
     end
     
     it "should not raise if command format is valid" do
-      lambda { Command.new('!tv mtv3') }.should_not raise_error(Spammeli::InvalidCommandFormat)
+      lambda { CommandRegistry.new('!tv mtv3') }.should_not raise_error(Spammeli::InvalidCommandFormat)
     end
     
     it "should parse a command and parameters" do
-      command = Command.new('!lastfm tempra recent')
+      command = CommandRegistry.new('!lastfm tempra recent')
       command.name.should == 'lastfm'
       command.params.should == ['tempra', 'recent']
       
-      command = Command.new('!weather   vaasa     tomorrow   ')
+      command = CommandRegistry.new('!weather   vaasa     tomorrow   ')
       command.name.should == 'weather'
       command.params.should == ['vaasa', 'tomorrow']
       
-      command = Command.new('!weather')
+      command = CommandRegistry.new('!weather')
       command.name.should == 'weather'
       command.params.should == []
     end
@@ -72,41 +72,41 @@ describe (Command = Spammeli::Command) do
   
   context "when register a command" do
     it "should work" do
-      Command.register(:lastfm, LastfmCommand)
-      Command.commands['lastfm'].should == LastfmCommand
+      CommandRegistry.register(:lastfm, LastfmCommand)
+      CommandRegistry.commands['lastfm'].should == LastfmCommand
     end
     
     it "should not override registered command with the same name" do
-      Command.register(:lastfm, LastfmCommand)
-      Command.commands['lastfm'].should == LastfmCommand
+      CommandRegistry.register(:lastfm, LastfmCommand)
+      CommandRegistry.commands['lastfm'].should == LastfmCommand
       
-      Command.register(:lastfm, WeatherCommand)
-      Command.commands['lastfm'].should_not == WeatherCommand
+      CommandRegistry.register(:lastfm, WeatherCommand)
+      CommandRegistry.commands['lastfm'].should_not == WeatherCommand
     end
     
     it "should override a registered command by forcing" do
-      Command.register(:lastfm, LastfmCommand)
-      Command.commands['lastfm'].should == LastfmCommand
+      CommandRegistry.register(:lastfm, LastfmCommand)
+      CommandRegistry.commands['lastfm'].should == LastfmCommand
       
-      Command.register(:lastfm, WeatherCommand, :override => true)
-      Command.commands['lastfm'].should == WeatherCommand
+      CommandRegistry.register(:lastfm, WeatherCommand, :override => true)
+      CommandRegistry.commands['lastfm'].should == WeatherCommand
     end
   end
   
   context "when invoking a command" do
     it "should work" do
-      Command.register(:lastfm, LastfmCommand)
-      Command.invoke('!lastfm').should == 'lastfm invoked'
-      Command.invoke('!lastfm tempra recent').should == 'lastfm invoked with tempra recent'
+      CommandRegistry.register(:lastfm, LastfmCommand)
+      CommandRegistry.invoke('!lastfm').should == 'lastfm invoked'
+      CommandRegistry.invoke('!lastfm tempra recent').should == 'lastfm invoked with tempra recent'
     end
     
     it "should raise if the command does not exist" do
-      lambda { Command.invoke('!does_not_exist') }.should raise_error(Spammeli::UnknownCommand)
+      lambda { CommandRegistry.invoke('!does_not_exist') }.should raise_error(Spammeli::UnknownCommand)
     end
     
     it "should raise if the command does not have the invoke method" do
-      Command.register(:invalid, InvalidCommand)
-      lambda { Command.invoke('!invalid')}.should raise_error(Spammeli::InvalidCommand)
+      CommandRegistry.register(:invalid, InvalidCommand)
+      lambda { CommandRegistry.invoke('!invalid')}.should raise_error(Spammeli::InvalidCommand)
     end
   end
 end

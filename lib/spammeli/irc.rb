@@ -77,7 +77,7 @@ module Spammeli
           input = Spammeli::Input.new($5)
           
           if input.command?
-            send_output("PRIVMSG #{$4} :#{Spammeli::Command.invoke($5)}")
+            send_output("PRIVMSG #{$4} :#{Spammeli::CommandRegistry.invoke($5)}")
           end
         else
           puts input

@@ -8,7 +8,7 @@ module Spammeli
   class InvalidCommand < Exception
   end
   
-  class Command
+  class CommandRegistry
     attr_reader :name, :params
     
     # Registered commands
