@@ -14,7 +14,7 @@ module Spammeli
     end
     
     def self.command_name
-      self.to_s.downcase
+      self.name.split('::').last.downcase
     end
   end
 end
