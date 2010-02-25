@@ -6,13 +6,13 @@ describe (Command = Spammeli::Command) do
   end
   
   context "when created" do
-    it "should return the command name" do
-      command = Command.new('lastfm')
-      command.name.should == 'lastfm'
+    it "should work without params" do
+      command = Command.new
+      command.params.should == []
     end
     
     it "should return params" do
-      command = Command.new('lasftm', ['tempra', 'recent'])
+      command = Command.new(['tempra', 'recent'])
       command.params.should == ['tempra', 'recent']
     end
   end
