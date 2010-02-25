@@ -15,10 +15,12 @@ module Spammeli
     @@commands = {}
     
     def self.register(command_name, klass, options = {})
+      command_name = command_name.to_s.downcase
+      
       if options[:override]
-        @@commands[command_name.to_s] = klass
+        @@commands[command_name] = klass
       else
-        @@commands[command_name.to_s] ||= klass
+        @@commands[command_name] ||= klass
       end
     end
     
