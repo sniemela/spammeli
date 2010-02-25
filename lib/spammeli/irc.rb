@@ -2,20 +2,38 @@ require 'socket'
 
 module Spammeli
   class Irc
-    attr_reader :server, :port, :connection
+    attr_reader :server, :port, :connection, :channels, :nick, :realname
     
-    def initialize(s, p)
+    def initialize(s, p, nick, realname, channels = [])
       @server, @port = s, p
       @connection = nil
-      @channel = "#tk08"
+      @channels = channels
+      @nick = nick
+      @realname = realname
+      @joined = false
     end
     
     def connect!
       @connection = TCPSocket.open(server, port) unless connected?
+      authenticate
     end
     
     def connected?
       !@connection.nil? && !@connection.closed?
+    end
+    
+    def join_to_channels
+      if connected?
+        send_output("JOIN #{channels.join(',')}")
+        @joined = true
+      end
+    end
+    
+    def authenticate
+      if connected?
+        send_output "USER #{nick} 8 * : #{realname}"
+        send_output "NICK #{nick}"
+      end
     end
     
     def send_output(output)
@@ -23,28 +41,28 @@ module Spammeli
       @connection.send("#{output}\n", 0)
     end
     
-    def send_to_channel(output)
-      send_output("PRIVMSG #{@channel} :#{output}")
-    end
-    
     def run!
       puts "Starting IRC BOT..."
       puts "Press CTRL-C to terminate."
       connect!
       
-      send_output "USER spammeli 8 * : Spam Anneli"
-      send_output "NICK spammeli"
-      
       begin
         while input = connection.gets
           begin
-            handle_input(input)
+            input = Spammeli::Input.new(input)
+            buffer = Spammeli::Output.new(@connection, input)
+            buffer.send
+            
+            if input.authenticated?
+              join_to_channels unless @joined
+            end
           rescue Spammeli::UnknownCommand => e
-            send_to_channel("I don't know how to handle the command #{e.message}. Maybe you would extend me?")
+            buffer.send_to_channel("I don't know how to handle the command #{e.message}. Maybe you could extend me?")
           rescue Spammeli::InvalidCommand
-            send_to_channel("Ouch, that command is registered but it doesn't have the invoke method.")
+            buffer.send_to_channel("Ouch, that command is registered but it doesn't have the invoke method.")
           rescue Exception => e
             puts "Outch: " + e.message
+            buffer.send_to_channel("Ouch, something bad happened!")
           end
         end
       rescue Interrupt
@@ -61,27 +79,5 @@ module Spammeli
       end
       Kernel.exit
     end
-    
-    private
-      # TODO: Clean this!
-      def handle_input(input)
-        case input.strip
-        when /^PING :(.+)$/
-          puts "=> Server Ping"
-          send_output("PONG :#{$1}")
-        when /End of \/MOTD command\./
-          # This should be right time to join to channels
-          send_output("JOIN #{@channel}")
-        when /:(.+)!(.+)@(.+)\sPRIVMSG\s(.+)\s:(.+)/
-          puts input
-          input = Spammeli::Input.new($5)
-          
-          if input.command?
-            send_output("PRIVMSG #{$4} :#{Spammeli::CommandRegistry.invoke($5)}")
-          end
-        else
-          puts input
-        end
-      end
   end
 end

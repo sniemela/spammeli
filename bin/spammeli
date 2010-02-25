@@ -2,4 +2,4 @@
 $:.unshift File.expand_path('../../lib', __FILE__)
 require 'spammeli'
 
-Spammeli::Irc.new('irc.quakenet.org', 6667).run!
+Spammeli::Irc.new('irc.quakenet.org', 6667, 'spammeli', 'Spam Anneli', ['#spammeli', '#tk08']).run!
