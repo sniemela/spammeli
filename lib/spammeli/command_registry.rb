@@ -25,7 +25,13 @@ module Spammeli
     end
     
     def self.remove!(command)
-      raise UnknownCommand unless @@commands.delete(command.to_s)
+      raise UnknownCommand unless removed = @@commands.delete(command.to_s)
+      removed
+    end
+    
+    def self.rename!(original, new_name)
+      command_klass = remove!(original)
+      register(new_name, command_klass, :override => true)
     end
     
     def self.commands

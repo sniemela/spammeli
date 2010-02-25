@@ -5,10 +5,7 @@ module Spammeli
     #
     #   !commands # => command1, command2
     #
-    class CommandList   
-      def initialize(params = [])
-      end
-      
+    class CommandList < Spammeli::Command
       def invoke
         Spammeli::CommandRegistry.commands.keys.sort.join(', ')
       end

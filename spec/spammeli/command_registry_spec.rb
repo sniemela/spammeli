@@ -124,4 +124,14 @@ describe (CommandRegistry = Spammeli::CommandRegistry) do
       lambda { CommandRegistry.remove!(:lasfm) }.should raise_error(Spammeli::UnknownCommand)
     end
   end
+  
+  it "should rename the registered command" do
+    CommandRegistry.register(:itunes, LastfmCommand)
+    CommandRegistry.commands['itunes'].should == LastfmCommand
+    CommandRegistry.commands['lastfm'].should be_nil
+    
+    CommandRegistry.rename!(:itunes, :lastfm)
+    CommandRegistry.commands['itunes'].should be_nil
+    CommandRegistry.commands['lastfm'].should == LastfmCommand
+  end
 end
