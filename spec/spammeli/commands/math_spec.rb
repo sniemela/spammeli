@@ -6,9 +6,4 @@ describe (Math = Spammeli::Commands::Math) do
     
     Math.new(formula).invoke.should == 10
   end
-  
-  it "should complain if formula contains illegal characters" do
-    formula = "(2 + 2) * 2a - 2b.".split(' ')
-    lambda { Math.new(formula).invoke }.should raise_error(ArgumentError)
-  end
 end
