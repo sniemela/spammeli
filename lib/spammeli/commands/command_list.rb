@@ -3,7 +3,7 @@ module Spammeli
     # Command list commands returns a list of registered commands
     # in alphabetical order.
     #
-    #   !commands # => command1, command2
+    #   !commandlist # => command1, command2
     #
     class CommandList < Spammeli::Command
       def invoke
@@ -11,6 +11,4 @@ module Spammeli
       end
     end
   end
-  
-  CommandRegistry.register(:commands, Commands::CommandList)
 end
