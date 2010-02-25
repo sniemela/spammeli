@@ -17,6 +17,8 @@ module Spammeli
     def self.register(command_name, klass, options = {})
       command_name = command_name.to_s.downcase
       
+      puts "Registering command #{klass.to_s}"
+      
       if options[:override]
         @@commands[command_name] = klass
       else
