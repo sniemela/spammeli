@@ -2,3 +2,4 @@
 require 'spammeli/commands/command_list'
 require 'spammeli/commands/dummy'
 require 'spammeli/commands/math'
+require 'spammeli/commands/weather'

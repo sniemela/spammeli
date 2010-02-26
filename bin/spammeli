@@ -1,5 +1,16 @@
 #!/usr/bin/env ruby
 $:.unshift File.expand_path('../../lib', __FILE__)
+
+begin
+  # Try to require the preresolved locked set of gems.
+  require File.expand_path('../.bundle/environment', __FILE__)
+rescue LoadError
+  # Fall back on doing an unlocked resolve at runtime.
+  require "rubygems"
+  require "bundler"
+  Bundler.setup
+end
+
 require 'spammeli'
 
 Spammeli::Irc.new('irc.quakenet.org', 6667, 'spammeli', 'Spam Anneli', ['#spammeli']).run!
