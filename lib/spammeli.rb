@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'rubygems'
-
 module Spammeli
   autoload :Command,         'spammeli/command'
   autoload :CommandRegistry, 'spammeli/command_registry'
