@@ -42,6 +42,10 @@ class InvalidCommand
 end
 
 describe (CommandRegistry = Spammeli::CommandRegistry) do
+  before :each do
+    CommandRegistry.clear
+  end
+  
   after(:each) do
     CommandRegistry.clear
   end
