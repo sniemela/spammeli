@@ -52,7 +52,7 @@ module Spammeli
       end
       
       def help
-        "Syntax: !lastfm user [name] [options]. Options: #{API_METHODS.join(', ')}"
+        "Syntax: !lastfm user [name] [options]. Options: #{API_METHODS.sort.join(', ')}"
       end
       
       private
