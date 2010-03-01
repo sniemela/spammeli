@@ -1,0 +1,12 @@
+# Spammeli Bot Configuration
+spammeli:
+  server:
+  port:
+  nick:
+  realname:
+  
+  # channels:
+  #   - channel1
+  #   - channel2
+  channels:
+    
