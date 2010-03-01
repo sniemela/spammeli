@@ -13,4 +13,10 @@ end
 
 require 'spammeli'
 
-Spammeli::Irc.new('irc.quakenet.org', 6667, 'spammeli', 'Spam Anneli', ['#spammeli']).run!
+server = Spammeli::Config.get(:server)
+port = Spammeli::Config.get(:port)
+nick = Spammeli::Config.get(:nick)
+realname = Spammeli::Config.get(:realname)
+channels = Spammeli::Config.channels
+
+Spammeli::Irc.new(server, port, nick, realname, channels).run!
