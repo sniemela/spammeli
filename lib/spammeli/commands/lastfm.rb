@@ -3,14 +3,8 @@ require 'open-uri'
 
 module Spammeli
   module Commands
-    class Lastfm# < Spammeli::Command
-      attr_reader :params
-      
+    class Lastfm < Spammeli::Command
       API_URL = 'http://ws.audioscrobbler.com'
-      
-      def initialize(params = [])
-        @params = params
-      end
       
       def invoke
         return help if params.empty?
