@@ -10,7 +10,7 @@ module Spammeli
       
       def initialize(params = [])
         super(params)
-        @doc = Nokogiri::XML(open(GOOGLE_API_URL + params.first)) if params.length > 0
+        @doc = Nokogiri::XML(open(GOOGLE_API_URL + extract_all_scandic(params.first))) if params.length > 0
         @city = @doc.at_css('city')[:data] if @doc
       end
       
@@ -40,6 +40,15 @@ module Spammeli
           value = "#{temp}"
           value = "#{value} ja #{condition.downcase}" unless condition == ""
           value
+        end
+        
+        def extract_all_scandic(param)
+          chars = {'ö' => 'o', 'ä' => 'a'}
+          new_parma = ''
+          chars.each do |scandic, ascii|
+            param = param.gsub(/#{scandic}+/, ascii)
+          end
+          param
         end
     end
   end
