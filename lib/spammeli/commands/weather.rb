@@ -17,18 +17,17 @@ module Spammeli
       def invoke
         return help if !doc || params.first == 'help'
         
-        value = case params.last
-          when 'now'
-            current_conditions
-          else
-            current_conditions
-          end
+        value = if params.length == 2
+          forecast_conditions(params.last)
+        else
+          current_conditions
+        end
         
         value = "#{city}: #{value}" if city
       end
       
       def help
-        "Syntax: !weather location"
+        "Syntax: !weather location [day]"
       end
       
       private
@@ -38,6 +37,20 @@ module Spammeli
           temp = current.at_css('temp_c')[:data]
           
           value = "#{temp}"
+          value = "#{value} ja #{condition.downcase}" unless condition == ""
+          value
+        end
+        
+        def forecast_conditions(day)
+          day_forecast = doc.css('weather forecast_conditions').select do |f|
+            f.at_css('day_of_week')[:data] == day.to_s.downcase
+          end.first
+          
+          temp_low = day_forecast.at_css('low')[:data]
+          temp_high = day_forecast.at_css('high')[:data]
+          condition = day_forecast.at_css('condition')[:data]
+          
+          value = "#{temp_low}/#{temp_high}"
           value = "#{value} ja #{condition.downcase}" unless condition == ""
           value
         end
