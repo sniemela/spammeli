@@ -1,16 +1,16 @@
 module Spammeli
   class Output
-    attr_reader :connection, :input, :out
+    attr_reader :irc, :input, :out
     
-    def initialize(connection, input)
-      @connection, @input = connection, input
+    def initialize(irc, input)
+      @irc, @input = irc, input
       @out = nil
     end
     
     def send
       @out = if input.command?
         out = benchmark do
-          Spammeli::CommandRegistry.invoke(input.message)
+          Spammeli::CommandRegistry.invoke(input.message, irc)
         end
         
         message_for_channel(out)
@@ -34,7 +34,7 @@ module Spammeli
       
       def send_to_connection(output)
         puts "=> Sending output\n\t#{output}"
-        @connection.send("#{output}\n", 0)
+        @irc.connection.send("#{output}\n", 0)
       end
       
       def benchmark(&block)

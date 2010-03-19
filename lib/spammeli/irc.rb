@@ -3,6 +3,7 @@ require 'socket'
 module Spammeli
   class Irc
     attr_reader :server, :port, :connection, :channels, :nick, :realname
+    attr_reader :input
     
     def initialize(s, p, nick, realname, channels = [])
       @server, @port = s, p
@@ -11,6 +12,7 @@ module Spammeli
       @nick = nick
       @realname = realname
       @joined = false
+      @input = nil
     end
     
     def connect!
@@ -49,11 +51,11 @@ module Spammeli
       begin
         while input = connection.gets
           begin
-            input = Spammeli::Input.new(input)
-            buffer = Spammeli::Output.new(@connection, input)
+            @input = Spammeli::Input.new(input)
+            buffer = Spammeli::Output.new(self, @input)
             buffer.send
             
-            if input.authenticated?
+            if @input.authenticated?
               join_to_channels unless @joined
             end
           rescue Spammeli::UnknownCommand => e

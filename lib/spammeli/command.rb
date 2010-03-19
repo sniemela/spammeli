@@ -1,6 +1,6 @@
 module Spammeli
   class Command
-    attr_reader :params
+    attr_reader :params, :irc
     
     class << self  
       def inherited(klass)
@@ -9,8 +9,13 @@ module Spammeli
       end
     end
     
-    def initialize(params = [])
+    def initialize(params = [], irc = nil)
       @params = params
+      @irc = irc
+    end
+    
+    def current_channel
+      irc.input.channel if irc
     end
     
     def self.command_name
