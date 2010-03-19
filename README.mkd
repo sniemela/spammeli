@@ -8,7 +8,7 @@ Before you install Spammeli make sure you have a bundler gem installed on your s
 
 When you are ready then hit:
 
-    bundle install
+    sudo bundle install
     
 ## Command structure
 
