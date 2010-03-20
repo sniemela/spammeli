@@ -11,7 +11,14 @@ rescue LoadError
   Bundler.setup
 end
 
+require 'fileutils'
 require 'spammeli'
+
+plugin_path = File.expand_path('../../vendor/plugins', __FILE__)
+path = File.join(plugin_path, '**', 'lib', '*.rb')
+Dir[path].each do |plugin|
+  require plugin
+end
 
 server = Spammeli::Config.get(:server)
 port = Spammeli::Config.get(:port)

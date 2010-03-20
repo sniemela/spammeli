@@ -3,3 +3,4 @@
 TODO
 config.yaml
 .bundle/
+vendor/plugins/**/*
