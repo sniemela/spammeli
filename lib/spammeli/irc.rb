@@ -67,6 +67,10 @@ module Spammeli
       @listeners << self
     end
     
+    def logger
+      @logger ||= Spammeli::Logger.new(File.expand_path('../../../log/spammeli.log', __FILE__))
+    end
+    
     def connect!
       @connection = TCPSocket.open(server, port) unless connected?
       authenticate
@@ -91,13 +95,12 @@ module Spammeli
     end
     
     def send_output(output)
-      puts "=> Sending output\n\t#{output}"
+      logger.debug "=> Sending output\n\t#{output}"
       @connection.send("#{output}\n", 0)
     end
     
     def run!
-      puts "Starting IRC BOT..."
-      puts "Press CTRL-C to terminate."
+      logger.info "Starting Spammeli...\nPress CTRL-C to terminate."
       connect!
       
       begin
@@ -112,7 +115,7 @@ module Spammeli
     end
     
     def terminate!
-      puts "Exiting..."
+      logger.info "Exiting..."
       if connected?
         send_output("QUIT :quitmo!")
         @connection.close
@@ -125,7 +128,7 @@ module Spammeli
         begin
           listener.send(method, *args) if listener.respond_to?(method)
         rescue Exception => e
-          puts "Something bad happened:\n#{e.inspect}"
+          logger.fatal "Something bad happened:\n#{e.inspect}"
         end
       end
     end
@@ -168,7 +171,7 @@ module Spammeli
     
     private
       def receive(line)
-        puts line
+        logger.debug "<< " + line
         methods = {}
         
         if line =~ /^:(.+?)\s+NOTICE\s+(\S+)\s+:(.+?)[\r\n]*$/

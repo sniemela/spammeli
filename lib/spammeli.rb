@@ -7,6 +7,7 @@ module Spammeli
   autoload :CommandRegistry, 'spammeli/command_registry'
   autoload :Config,          'spammeli/config'
   autoload :Irc,             'spammeli/irc'
+  autoload :Logger,          'spammeli/logger'
   autoload :Version,         'spammeli/version'
 end
 

@@ -4,3 +4,4 @@ TODO
 config.yaml
 .bundle/
 vendor/plugins/**/*
+log/*.log
