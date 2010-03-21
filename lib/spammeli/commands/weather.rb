@@ -8,8 +8,7 @@ module Spammeli
       
       GOOGLE_API_URL = 'http://www.google.com/ig/api?hl=fi&weather='
       
-      def initialize(params = [], irc = nil)
-        super(params, irc)
+      def configure
         @doc = Nokogiri::XML(open(GOOGLE_API_URL + extract_all_scandic(params.first))) if params.length > 0
         @city = @doc.at_css('city')[:data] if @doc
       end

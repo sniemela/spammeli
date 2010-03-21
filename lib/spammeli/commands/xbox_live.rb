@@ -8,9 +8,7 @@ module Spammeli
       
       XBOX_LIVE_API = 'http://xboxapi.duncanmackenzie.net/gamertag.ashx?GamerTag='
       
-      def initialize(params = [], irc = nil)
-        super(params, irc)
-        
+      def configure
         if @nick = params.first
           @doc = Nokogiri::XML(open(XBOX_LIVE_API + @nick))
           @gamer = GamerTag.new(@doc)

@@ -12,6 +12,10 @@ module Spammeli
     def initialize(params = [], irc = nil)
       @params = params
       @irc = irc
+      configure
+    end
+    
+    def configure
     end
     
     def current_channel
