@@ -15,6 +15,10 @@ When you are ready then hit:
 If you are developing your own custom command to Spammeli then you must have an invoke method in the class. Here is an example:
 
     class MyCustomCommand < Spammeli::Command
+      def configure
+        # Configure your command before it is invoked
+      end
+    
       def invoke
         # Implement or invoke your command in here
       end
