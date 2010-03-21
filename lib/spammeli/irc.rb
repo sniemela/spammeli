@@ -154,6 +154,13 @@ module Spammeli
         args[:message].nil? ? pong : pong(args[:message])
       end
       
+      def irc_privmsg_event(irc, sender, args)
+        if args[:message] =~ /^!\w+/
+          output = CommandRegistry.invoke(args[:message], irc)
+          send_output "PRIVMSG #{args[:channel]} :#{output}"
+        end
+      end
+      
       # TODO: named responses
       def irc_001_response(irc, sender, recipient, args, msg)
         join_to_channels unless @joined
@@ -205,6 +212,8 @@ module Spammeli
         case command
         when :quit
           arguments = {}
+        when :privmsg
+          arguments = { :channel => arg_array[0] }
         when :join
           arguments = { :channel => (msg || arg_array[0]) }
           msg = nil
@@ -221,8 +230,8 @@ module Spammeli
       
       def split_out_message(arg_str)
         if arg_str.match(/^(.*?):(.*)$/) then
-          arg_array = $1.strip.split(/\s+/)
           msg = $2
+          arg_array = $1.strip.split(/\s+/)
           return arg_array, msg
         else
           # no colon in message

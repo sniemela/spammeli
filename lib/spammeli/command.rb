@@ -15,7 +15,7 @@ module Spammeli
     end
     
     def current_channel
-      irc.input.channel if irc
+      ""
     end
     
     def self.command_name
