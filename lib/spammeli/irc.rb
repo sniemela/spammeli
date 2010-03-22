@@ -159,11 +159,11 @@ module Spammeli
       
       def irc_privmsg_event(irc, sender, args)
         if args[:message] =~ /^!\w+/
-          irc_bot_command_event(irc, args[:message])
+          irc_bot_command_event(irc, sender, args)
         end
       end
       
-      def irc_bot_command_event(irc, command)
+      def irc_bot_command_event(irc, sender, args)
         output = CommandRegistry.invoke(command, irc)
         send_output "PRIVMSG #{args[:channel]} :#{output}"
       end

@@ -43,8 +43,6 @@ class MockIrc < Spammeli::Irc
   end
 end
 
-p Spammeli::CommandRegistry.commands
-
 describe (Irc = Spammeli::Irc) do
   before do
     @irc = MockIrc.new('irc.quakenet.org', 6667, 'spammeli', 'Anneli', ['#tk08'])
@@ -64,7 +62,11 @@ describe (Irc = Spammeli::Irc) do
   
   it "should invoke a command" do
     @irc.connection.in << ":tmPr!~tmpr@asd.fi PRIVMSG #tk08 :!dummy\n"
-    @irc.should_receive(:irc_bot_command_event).with(@irc, "!dummy")
+    
+    sender = { :nick => 'tmPr', :user => '~tmpr', :host => 'asd.fi' }
+    args = { :message => '!dummy', :channel => '#tk08' }
+    @irc.should_receive(:irc_bot_command_event).with(@irc, sender, args)
+    
     @irc.run!
   end
 end
