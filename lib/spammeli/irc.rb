@@ -159,9 +159,13 @@ module Spammeli
       
       def irc_privmsg_event(irc, sender, args)
         if args[:message] =~ /^!\w+/
-          output = CommandRegistry.invoke(args[:message], irc)
-          send_output "PRIVMSG #{args[:channel]} :#{output}"
+          irc_bot_command_event(irc, args[:message])
         end
+      end
+      
+      def irc_bot_command_event(irc, command)
+        output = CommandRegistry.invoke(command, irc)
+        send_output "PRIVMSG #{args[:channel]} :#{output}"
       end
       
       # TODO: named responses
