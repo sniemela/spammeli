@@ -12,12 +12,12 @@ class Connection
   end
   
   def send(output, n)
-    out << output
+    @out << output
   end
 end
 
 class MockIrc < Spammeli::Irc
-  attr_accessor :connection
+  attr_accessor :connection, :channels
   
   def initialize(*args)
     super(*args)
@@ -36,9 +36,9 @@ class MockIrc < Spammeli::Irc
   end
   
   def run!
-    if line = connection.gets
+    connection.gets.split("\n").each do |line|
       methods = receive(line)
-      methods.each { |meth, args| broadcast(meth, *args) }
+      methods.each { |meth, args| broadcast_sync(meth, *args) }
     end
   end
 end
@@ -46,6 +46,36 @@ end
 describe (Irc = Spammeli::Irc) do
   before do
     @irc = MockIrc.new('irc.quakenet.org', 6667, 'spammeli', 'Anneli', ['#tk08'])
+  end
+  
+  context "when created" do
+    it "should initialize channels" do
+      @irc.channels['#tk08'].is_a? Spammeli::Channel
+      @irc.channels['#tk08'].name.should == '#tk08'
+    end
+  end
+  
+  context "updating users" do
+    it "should update on names list" do
+      @irc.connection.in << ":underworld2.no.quakenet.org 353 spammeli @ #tk08 :spammeli @tmPr\n"
+      @irc.run!
+      @irc.channels['#tk08'].users.should == ['spammeli', 'tmPr']
+    end
+    
+    it "should update after someone joining channel" do
+      @irc.connection.in << ":underworld2.no.quakenet.org 353 spammeli @ #tk08 :spammeli @tmPr\n"
+      @irc.connection.in << ":soulcage!~soulcage@3e48e57b.adsl.multi.fi JOIN #tk08\n"
+      @irc.run!
+      @irc.channels['#tk08'].users.should == ['spammeli', 'tmPr', 'soulcage']
+    end
+    
+    it "should update after someone parting channel" do
+      @irc.connection.in << ":underworld2.no.quakenet.org 353 spammeli @ #tk08 :spammeli @tmPr\n"
+      @irc.connection.in << ":soulcage!~soulcage@3e48e57b.adsl.multi.fi JOIN #tk08\n"
+      @irc.connection.in << ":soulcage!~soulcage@3e48e57b.adsl.multi.fi PART #tk08 :Leaving...\n"
+      @irc.run!
+      @irc.channels['#tk08'].users.should == ['spammeli', 'tmPr']
+    end
   end
   
   it "should send pong" do

@@ -3,6 +3,7 @@
 require 'active_support'
 
 module Spammeli
+  autoload :Channel,         'spammeli/channel'
   autoload :Command,         'spammeli/command'
   autoload :CommandRegistry, 'spammeli/command_registry'
   autoload :Config,          'spammeli/config'

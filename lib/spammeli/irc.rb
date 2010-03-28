@@ -59,12 +59,15 @@ module Spammeli
     }
     
     def initialize(s, p, nick, realname, channels = [])
-      @channels, @nick, @realname = channels, nick, realname
+      @nick, @realname = nick, realname
       @server, @port, @connection = s, p, nil
       @joined = false
       
       @listeners = []
       @listeners << self
+      
+      @channels = {}
+      channels.each { |c| @channels[c.to_s] = Channel.new(c.to_s) }
     end
     
     def logger
@@ -82,7 +85,7 @@ module Spammeli
     
     def join_to_channels
       if connected?
-        send_output("JOIN #{channels.join(',')}")
+        send_output("JOIN #{channels.keys.join(',')}")
         @joined = true
       end
     end
@@ -124,6 +127,18 @@ module Spammeli
     end
     
     def broadcast(method, *args)
+      @listeners.each do |listener|
+        Thread.new do
+          begin
+            listener.send(method, *args) if listener.respond_to?(method)
+          rescue Exception => e
+            logger.fatal "Something bad happened:\n#{e.inspect}"
+          end
+        end
+      end
+    end
+    
+    def broadcast_sync(method, *args)
       @listeners.each do |listener|
         begin
           listener.send(method, *args) if listener.respond_to?(method)
@@ -168,9 +183,27 @@ module Spammeli
         send_output "PRIVMSG #{args[:channel]} :#{output}"
       end
       
+      def irc_join_event(irc, sender, args)
+        if channel = @channels[args[:channel]]
+          channel.join_user(sender)
+        end
+      end
+      
+      def irc_part_event(irc, sender, args)
+        if channel = @channels[args[:channel]]
+          channel.part_user(sender)
+        end
+      end
+      
       # TODO: named responses
       def irc_001_response(irc, sender, recipient, args, msg)
         join_to_channels unless @joined
+      end
+      
+      def irc_353_response(irc, sender, recipient, args, msg)
+        if channel = @channels[args.last]
+          channel.update_users!(msg)
+        end
       end
     
     private
@@ -224,6 +257,8 @@ module Spammeli
         when :join
           arguments = { :channel => (msg || arg_array[0]) }
           msg = nil
+        when :part
+          arguments = { :channel => arg_array[0] }
         when :ping
           arguments = { :server => arg_array[0] }
         end
