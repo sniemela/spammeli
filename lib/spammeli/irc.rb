@@ -1,4 +1,5 @@
 require 'socket'
+require 'thread'
 
 module Spammeli
   class Irc
@@ -68,6 +69,8 @@ module Spammeli
       
       @channels = {}
       channels.each { |c| @channels[c.to_s] = Channel.new(c.to_s) }
+      
+      @join_mutex = Mutex.new
     end
     
     def logger
@@ -274,7 +277,7 @@ module Spammeli
       def split_out_message(arg_str)
         if arg_str.match(/^(.*?):(.*)$/) then
           msg = $2
-          arg_array = $1.strip.split(/\s+/)
+          arg_array = $1.strip.split(/\s+/).map { |arg| arg.downcase }
           return arg_array, msg
         else
           # no colon in message

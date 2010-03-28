@@ -20,7 +20,7 @@ module Spammeli
       
       def channels
         if chans = get(:channels)
-          chans.to_a.compact.map { |c| "#" + c.to_s }
+          chans.to_a.compact.map { |c| "#" + c.to_s.downcase }
         else
           []
         end
