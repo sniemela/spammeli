@@ -9,7 +9,7 @@ module Spammeli
   end
   
   class CommandRegistry
-    attr_reader :name, :params, :irc
+    attr_reader :name, :params, :options
     
     # Registered commands
     @@commands = {}
@@ -42,14 +42,14 @@ module Spammeli
       @@commands = {}
     end
     
-    def self.invoke(command_line, irc = nil)
-      new(command_line, irc).invoke
+    def self.invoke(command_line, options = {})
+      new(command_line, options).invoke
     end
     
-    def initialize(command_line, irc = nil)
+    def initialize(command_line, options = {})
       raise InvalidCommandFormat unless command_line.strip =~ /^!\w+/
       @name, @params = parse_command_line(command_line)
-      @irc = irc
+      @options = options
     end
     
     def invoke
@@ -59,7 +59,7 @@ module Spammeli
     
     def object
       raise UnknownCommand, name unless custom_command = @@commands[name]
-      custom_command.new(params, irc)
+      custom_command.new(params, options)
     end
     
     private

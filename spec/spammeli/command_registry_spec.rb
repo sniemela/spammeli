@@ -3,7 +3,7 @@ require 'spec_helper'
 class LastfmCommand
   attr_reader :name, :params
   
-  def initialize(params = [], irc = nil)
+  def initialize(params = [], options = {})
     @name = 'lastfm'
     @params = params
   end
@@ -20,7 +20,7 @@ end
 class WeatherCommand
   attr_reader :name, :params
   
-  def initialize(params = [], irc = nil)
+  def initialize(params = [], options = {})
     @name = 'weather'
     @params = params
   end
@@ -33,7 +33,7 @@ end
 class InvalidCommand
   attr_reader :name, :params
   
-  def initialize(params = [], irc = nil)
+  def initialize(params = [], options = {})
     @name = 'invalid'
     @params = params
   end

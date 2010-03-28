@@ -179,7 +179,8 @@ module Spammeli
       end
       
       def irc_bot_command_event(irc, sender, args)
-        output = CommandRegistry.invoke(args[:message], irc)
+        options = { :irc => irc, :sender => sender, :args => args }
+        output = CommandRegistry.invoke(args[:message], options)
         send_output "PRIVMSG #{args[:channel]} :#{output}"
       end
       
