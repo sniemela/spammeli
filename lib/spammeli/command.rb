@@ -23,15 +23,15 @@ module Spammeli
     end
 
     def irc
-      @irc ||= options[:irc]
+      options[:irc]
     end
 
     def sender
-      @sender ||= options[:sender]
+      options[:sender]
     end
 
     def channel
-      @channel ||= irc.channels[options[:args][:channel]]
+      irc.channels[options[:args][:channel]]
     end
 
     def self.command_name
