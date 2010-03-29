@@ -1,8 +1,13 @@
 require 'socket'
 require 'thread'
+require 'active_support/callbacks'
 
 module Spammeli
   class Irc
+    include ActiveSupport::Callbacks
+    
+    define_callbacks :before_run, :before_terminate
+    
     attr_reader :server, :port, :connection, :channels, :nick, :realname
     
     class Parameter
@@ -107,6 +112,8 @@ module Spammeli
     
     def run!
       logger.info "Starting Spammeli...\nPress CTRL-C to terminate."
+      
+      run_callbacks(:before_run)
       connect!
       
       begin
@@ -122,6 +129,8 @@ module Spammeli
     
     def terminate!
       logger.info "Exiting..."
+      run_callbacks(:before_terminate)
+      
       if connected?
         send_output("QUIT :quitmo!")
         @connection.close
