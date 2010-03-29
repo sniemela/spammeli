@@ -17,6 +17,10 @@ module Spammeli
     end
     
     class << self
+      def all
+        @@registered_plugins
+      end
+      
       def register_all!(irc)
         return unless respond_to?(:subclasses)
         
