@@ -9,6 +9,7 @@ module Spammeli
   autoload :Config,          'spammeli/config'
   autoload :Irc,             'spammeli/irc'
   autoload :Logger,          'spammeli/logger'
+  autoload :Plugin,          'spammeli/plugin'
   autoload :Version,         'spammeli/version'
 end
 

@@ -76,6 +76,12 @@ module Spammeli
       channels.each { |c| @channels[c.to_s] = Channel.new(c.to_s) }
       
       @join_mutex = Mutex.new
+      
+      Spammeli::Plugin.register_all!(self)
+    end
+    
+    def add_listener(obj)
+      @listeners << obj
     end
     
     def logger
