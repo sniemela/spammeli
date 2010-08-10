@@ -8,11 +8,10 @@ module Spammeli
       
       def invoke
         return help if params.empty?
-        
-        type, name, option = params[0], params[1], params[2]
-        
-        case type
-        when 'user'
+
+        name, option = params[0], params[1]
+
+        if name
           LastfmUser.new(name, option).invoke
         else
           help
@@ -20,7 +19,7 @@ module Spammeli
       end
       
       def help
-        "Syntax: !lastfm [user/artist] [name] [options]"
+        "Syntax: !lastfm <nick> <options>"
       end
     end
     
@@ -46,7 +45,7 @@ module Spammeli
       end
       
       def help
-        "Syntax: !lastfm user [name] [options]. Options: #{API_METHODS.sort.join(', ')}"
+        "Syntax: !lastfm <nick> <options>. Options: #{API_METHODS.sort.join(', ')}"
       end
       
       private
