@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'active_support/core_ext/string'
 
 class Connection
   attr_accessor :out, :in
@@ -77,7 +78,12 @@ describe (Irc = Spammeli::Irc) do
       @irc.channels['#tk08'].users.should == ['spammeli', 'tmPr']
     end
   end
-  
+
+  it "should send utf8 encoded output" do
+    @irc.send_output("?? ??")
+    @irc.connection.out.is_utf8?.should == true
+  end
+
   it "should send pong" do
     @irc.connection.in << "PING :123\n"
     @irc.run!
