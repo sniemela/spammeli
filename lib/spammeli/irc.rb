@@ -1,6 +1,8 @@
+# encoding: utf-8
 require 'socket'
 require 'thread'
 require 'active_support/callbacks'
+require 'active_support/core_ext/string'
 
 module Spammeli
   class Irc
@@ -90,6 +92,7 @@ module Spammeli
     
     def connect!
       @connection = TCPSocket.open(server, port) unless connected?
+      @connection.set_encoding("ISO-8859-1")
       authenticate
     end
     
@@ -229,7 +232,7 @@ module Spammeli
       def receive(line)
         logger.debug "<< " + line
         methods = {}
-        
+
         if line =~ /^:(.+?)\s+NOTICE\s+(\S+)\s+:(.+?)[\r\n]*$/
           server, sender, msg = $1, $2, $3
           methods[:irc_server_notice] = [self, server, sender, msg]

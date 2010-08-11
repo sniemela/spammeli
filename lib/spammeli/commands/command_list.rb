@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Spammeli
   module Commands
     # Command list commands returns a list of registered commands

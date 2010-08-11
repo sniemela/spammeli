@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Spammeli
   module Commands
     class Dummy < Spammeli::Command

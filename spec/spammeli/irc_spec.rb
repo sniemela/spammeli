@@ -1,7 +1,8 @@
 require 'spec_helper'
+require 'socket'
 require 'active_support/core_ext/string'
 
-class Connection
+class Connection < TCPSocket
   attr_accessor :out, :in
   
   def initialize
@@ -77,11 +78,6 @@ describe (Irc = Spammeli::Irc) do
       @irc.run!
       @irc.channels['#tk08'].users.should == ['spammeli', 'tmPr']
     end
-  end
-
-  it "should send utf8 encoded output" do
-    @irc.send_output("?? ??")
-    @irc.connection.out.is_utf8?.should == true
   end
 
   it "should send pong" do

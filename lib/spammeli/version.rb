@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Spammeli
   module Version
     MAJOR = 0

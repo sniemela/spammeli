@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Spammeli
   class Plugin
     class_inheritable_accessor :plugin_name

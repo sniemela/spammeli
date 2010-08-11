@@ -1,6 +1,7 @@
 $:.unshift File.expand_path('../lib', __FILE__)
 
-require 'spammeli'
+require 'rubygems'
+require 'bundler/setup'
 
 begin
   require 'spec/rake/spectask'
