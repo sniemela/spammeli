@@ -1,32 +1,8 @@
 #!/usr/bin/env ruby
 $:.unshift File.expand_path('../../lib', __FILE__)
 
-Encoding.default_external = Encoding::UTF_8
-Encoding.default_internal = Encoding::UTF_8
-
-begin
-  # Try to require the preresolved locked set of gems.
-  require File.expand_path('../.bundle/environment', __FILE__)
-rescue LoadError
-  # Fall back on doing an unlocked resolve at runtime.
-  require "rubygems"
-  require "bundler"
-  Bundler.setup
-end
-
-require 'fileutils'
+require 'rubygems'
+require 'bundler/setup'
 require 'spammeli'
 
-plugin_path = File.expand_path('../../vendor/plugins', __FILE__)
-path = File.join(plugin_path, '**', 'lib', '*.rb')
-Dir[path].each do |plugin|
-  require plugin
-end
-
-server = Spammeli::Config.get(:server)
-port = Spammeli::Config.get(:port)
-nick = Spammeli::Config.get(:nick)
-realname = Spammeli::Config.get(:realname)
-channels = Spammeli::Config.channels
-
-Spammeli::Irc.new(server, port, nick, realname, channels).run!
+p Spammeli::Commands.load

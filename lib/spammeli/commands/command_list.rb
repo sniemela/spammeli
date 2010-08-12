@@ -7,7 +7,7 @@ module Spammeli
     #
     #   !commandlist # => command1, command2
     #
-    class CommandList < Spammeli::Command
+    class CommandList
       def invoke
         Spammeli::CommandRegistry.commands.keys.sort.join(', ')
       end

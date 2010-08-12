@@ -1,6 +1,6 @@
 module Spammeli
   module Commands
-    class Mathematic < Spammeli::Command
+    class Mathematic
       MATH_FUNCTIONS = %w(
         acos acosh asin asinh atan atan2
         atanh cosh erf erfc exp frexp hypot
@@ -33,6 +33,4 @@ module Spammeli
       end
     end
   end
-  
-  CommandRegistry.rename!(:mathematic, :math)
 end

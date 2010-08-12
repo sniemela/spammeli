@@ -2,7 +2,7 @@
 
 module Spammeli
   module Commands
-    class Dummy < Spammeli::Command
+    class Dummy
       def invoke
         "This a dummy command that does nothing"
       end

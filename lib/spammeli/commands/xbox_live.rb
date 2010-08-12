@@ -4,7 +4,7 @@ require 'open-uri'
 
 module Spammeli
   module Commands
-    class Xlive < Spammeli::Command
+    class XboxLive
       attr_reader :nick, :doc, :gamer
       
       XBOX_LIVE_API = 'http://xboxapi.duncanmackenzie.net/gamertag.ashx?GamerTag='

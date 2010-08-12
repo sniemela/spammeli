@@ -4,7 +4,7 @@ require 'open-uri'
 
 module Spammeli
   module Commands
-    class Weather < Spammeli::Command
+    class Weather
       attr_reader :doc, :city
       
       GOOGLE_API_URL = 'http://www.google.com/ig/api?hl=fi&weather='

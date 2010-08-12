@@ -1,16 +1,9 @@
 # encoding: utf-8
 
 require 'active_support'
-require 'spammeli/version'
+require 'cinch'
+require 'spammeli/commands'
 
 module Spammeli
-  autoload :Channel,         'spammeli/channel'
-  autoload :Command,         'spammeli/command'
-  autoload :CommandRegistry, 'spammeli/command_registry'
-  autoload :Config,          'spammeli/config'
-  autoload :Irc,             'spammeli/irc'
-  autoload :Logger,          'spammeli/logger'
-  autoload :Plugin,          'spammeli/plugin'
+  VERSION = '0.5.0'
 end
-
-require 'spammeli/commands'

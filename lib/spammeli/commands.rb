@@ -1,10 +1,19 @@
-# Require all shipped commands
-require 'spammeli/commands/about'
-require 'spammeli/commands/command_list'
-require 'spammeli/commands/dummy'
-require 'spammeli/commands/lastfm'
-require 'spammeli/commands/math'
-require 'spammeli/commands/plugins'
-require 'spammeli/commands/users'
-require 'spammeli/commands/weather'
-require 'spammeli/commands/xbox_live'
+Dir["#{File.dirname(__FILE__)}/commands/*.rb"].sort.each do |path|
+  require "spammeli/commands/#{File.basename(path, '.rb')}"
+end
+
+require 'active_support/core_ext/string'
+
+module Spammeli
+  module Commands
+    def self.load(cmd = nil)
+      if cmd
+        ["Spammeli::Commands::#{cmd.classify}".constantize]
+      else
+        Dir["#{File.dirname(__FILE__)}/commands/*.rb"].map do |path|
+          "Spammeli::Commands::#{File.basename(path, '.rb').classify}".constantize
+        end
+      end
+    end
+  end
+end
