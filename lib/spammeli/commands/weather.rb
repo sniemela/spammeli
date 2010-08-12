@@ -1,33 +1,38 @@
-# encoding: utf-8
+# encoding: iso-8859-1
 require 'nokogiri'
 require 'open-uri'
 
 module Spammeli
   module Commands
     class Weather
+      include Cinch::Plugin
+
       attr_reader :doc, :city
-      
+
       GOOGLE_API_URL = 'http://www.google.com/ig/api?hl=fi&weather='
-      
-      def configure
-        @doc = Nokogiri::XML(open(GOOGLE_API_URL + extract_all_scandic(params.first))) if params.length > 0
+
+      match /weather ([^\s]+)(\s[^\s]+)?/
+      help "Syntax: !weather <location> <day>. Examples: !weather san+francisco tomorrow, !weather vaasa"
+
+      def configure(*params)
+        q = extract_all_scandic(params.first)
+        @doc = Nokogiri::XML(open(GOOGLE_API_URL + q), nil, 'ISO-8859-1') if params.length > 0
         @city = @doc.at_css('city')[:data] if @doc
       end
       
-      def invoke
-        return help if !doc || params.first == 'help'
-        
-        value = if params.length == 2
-          forecast_conditions(params.last)
+      def execute(m, location, day)
+        configure(location, day)
+
+        value = if day
+          day.strip!
+          forecast_conditions(day)
         else
           current_conditions
         end
         
         value = "#{city}: #{value}" if city
-      end
-      
-      def help
-        "Syntax: !weather location [day]"
+
+        m.reply(value)
       end
       
       private

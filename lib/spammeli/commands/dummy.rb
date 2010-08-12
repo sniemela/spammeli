@@ -3,8 +3,12 @@
 module Spammeli
   module Commands
     class Dummy
-      def invoke
-        "This a dummy command that does nothing"
+      include Cinch::Plugin
+
+      match 'dummy'
+
+      def execute(message)
+        message.reply 'This is a dummy command that does nothing.'
       end
     end
   end

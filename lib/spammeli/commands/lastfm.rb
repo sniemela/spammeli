@@ -4,26 +4,6 @@ require 'open-uri'
 
 module Spammeli
   module Commands
-    class Lastfm
-      API_URL = 'http://ws.audioscrobbler.com'
-      
-      def invoke
-        return help if params.empty?
-
-        name, option = params[0], params[1]
-
-        if name
-          LastfmUser.new(name, option).invoke
-        else
-          help
-        end
-      end
-      
-      def help
-        "Syntax: !lastfm <nick> <options>"
-      end
-    end
-    
     class LastfmUser
       attr_reader :name, :option, :doc
       
@@ -92,6 +72,21 @@ module Spammeli
           i = 0
           items[0..1].inject('') { |result, item| result += "#{i + 1}. #{item.text} "; i += 1; result }
         end
+    end
+
+    class Lastfm
+      include Cinch::Plugin
+
+      API_URL = 'http://ws.audioscrobbler.com'
+
+      match /lastfm ([^\s+]+)\s([^\s+]+)/
+      help "Syntax: !lastfm <nick> <option>. Available options: #{LastfmUser::API_METHODS.sort.join(', ')}"
+
+      def execute(m, nick, option)
+        if nick
+          m.reply LastfmUser.new(nick, option).invoke
+        end
+      end
     end
   end
 end

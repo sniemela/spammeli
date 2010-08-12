@@ -5,4 +5,14 @@ require 'rubygems'
 require 'bundler/setup'
 require 'spammeli'
 
-p Spammeli::Commands.load
+spammeli = Cinch::Bot.new do
+  configure do |c|
+    c.nick = 'spammeli'
+    c.realname = 'Spam Anneli'
+    c.server = 'irc.quakenet.org'
+    c.channels = ['#spammeli']
+    c.plugins.plugins = Spammeli::Commands.load
+  end
+end
+
+spammeli.start
