@@ -10,7 +10,7 @@ spammeli = Cinch::Bot.new do
     c.nick = 'spammeli'
     c.realname = 'Spam Anneli'
     c.server = 'irc.quakenet.org'
-    c.channels = ['#spammeli']
+    c.channels = ['#spammeli', '#mepojat']
     c.plugins.plugins = Spammeli::Commands.load
   end
 end

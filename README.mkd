@@ -1,6 +1,8 @@
 # Spammeli
 
-Spammeli will be an irc bot.
+Powered by the Cinch Bot Framework.
+
+Spammeli will be an irc bot. The experimental branch is unstable, and it's not recommended for production. Tested only on Ruby 1.9.2.
 
 ## Install
 
@@ -9,17 +11,4 @@ Before you install Spammeli make sure you have a bundler gem installed on your s
 When you are ready then hit:
 
     sudo bundle install
-    
-## Command structure
 
-If you are developing your own custom command to Spammeli then you must have an invoke method in the class. Here is an example:
-
-    class MyCustomCommand < Spammeli::Command
-      def configure
-        # Configure your command before it is invoked
-      end
-    
-      def invoke
-        # Implement or invoke your command in here
-      end
-    end
