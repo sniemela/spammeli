@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/injekt/cinch.git
+  revision: 2e76529
+  branch: merge
+  specs:
+    cinch (1.0.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -12,6 +19,7 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport (= 3.0.0.beta4)
+  cinch!
   i18n
   nokogiri
   rspec
